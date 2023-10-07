@@ -7,7 +7,7 @@
  * Version: 0.1
  * License: GPLv3
  * Author URI: https://iqbalmahmud.com/
- * Text Domain: wpr-addons
+ * Text Domain: iqbal-mahmud-wp-login-to-access
 */
 
 // Function to add a menu page
