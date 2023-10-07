@@ -88,8 +88,20 @@ function content_access_custom_login_logo() {
             text-indent: -9999px;
         }
     </style>
-    <a href="<?php echo esc_url(home_url()); ?>" title="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>" style="width: <?php echo esc_attr($logo_width); ?>px; height: <?php echo esc_attr($logo_height); ?>px;"></a>
+    <a href="" title="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>" style="width: <?php echo esc_attr($logo_width); ?>px; height: <?php echo esc_attr($logo_height); ?>px;"></a>
     <?php
 }
 add_action('login_head', 'content_access_custom_login_logo');
+
+//login logo url
+function my_login_logo_url() {
+    return home_url();
+}
+add_filter( 'login_headerurl', 'my_login_logo_url' );
+
+function my_login_logo_url_title() {
+    return 'Your Site Name and Info';
+}
+add_filter( 'login_headertext', 'my_login_logo_url_title' );
+
 ?>
