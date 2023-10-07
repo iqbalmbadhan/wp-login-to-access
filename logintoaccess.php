@@ -28,6 +28,8 @@ function content_access_settings_page() {
         $enabled = isset($_POST['enabled']) ? 1 : 0;
         update_option('content_access_enabled', $enabled);
         update_option('login_logo_url', sanitize_text_field($_POST['login_logo_url']));
+        update_option('logo_width', absint($_POST['logo_width']));
+        update_option('logo_height', absint($_POST['logo_height']));
         ?>
         <div class="notice notice-success is-dismissible">
             <p>Settings saved.</p>
@@ -37,6 +39,8 @@ function content_access_settings_page() {
 
     $enabled = get_option('content_access_enabled', 1);
     $login_logo_url = get_option('login_logo_url', '');
+    $logo_width = get_option('logo_width', 84); // Default width
+    $logo_height = get_option('logo_height', 84); // Default height
 
     ?>
     <div class="wrap">
@@ -47,6 +51,12 @@ function content_access_settings_page() {
 
             <label for="login_logo_url">Custom Login Logo URL:</label>
             <input type="text" name="login_logo_url" value="<?php echo esc_attr($login_logo_url); ?>"><br><br>
+
+            <label for="logo_width">Logo Width (in pixels):</label>
+            <input type="number" name="logo_width" value="<?php echo esc_attr($logo_width); ?>"><br><br>
+
+            <label for="logo_height">Logo Height (in pixels):</label>
+            <input type="number" name="logo_height" value="<?php echo esc_attr($logo_height); ?>"><br><br>
 
             <input type="submit" name="submit" class="button-primary" value="Save Settings">
         </form>
@@ -63,16 +73,23 @@ function content_access_restrict_content() {
 }
 add_action('template_redirect', 'content_access_restrict_content');
 
-// Function to customize the login logo URL
+// Function to customize the login logo URL and size
 function content_access_custom_login_logo() {
     $login_logo_url = get_option('login_logo_url', '');
-    if (!empty($login_logo_url)) {
-        echo '<style type="text/css">
-                  .login h1 a {
-                      background-image: url(' . esc_url($login_logo_url) . ') !important;
-                  }
-              </style>';
-    }
+    $logo_width = get_option('logo_width', 84);
+    $logo_height = get_option('logo_height', 84);
+    ?>
+    <style type="text/css">
+        .login h1 a {
+            background-image: url(<?php echo esc_url($login_logo_url); ?>);
+            background-size: <?php echo esc_attr($logo_width); ?>px <?php echo esc_attr($logo_height); ?>px;
+            width: <?php echo esc_attr($logo_width); ?>px;
+            height: <?php echo esc_attr($logo_height); ?>px;
+            text-indent: -9999px;
+        }
+    </style>
+    <a href="<?php echo esc_url(home_url()); ?>" title="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>" style="width: <?php echo esc_attr($logo_width); ?>px; height: <?php echo esc_attr($logo_height); ?>px;"></a>
+    <?php
 }
 add_action('login_head', 'content_access_custom_login_logo');
 ?>
